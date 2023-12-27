@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
 import InfiniteScroll from "react-infinite-scroll-component";
-
-// import PropTypes from 'prop-types'
 import NewsItem from './NewsItem'
 import Spinner from './Spinner';
 import propTypes from 'prop-types'
@@ -29,8 +27,13 @@ export class News extends Component {
   }
 
   // it is a life cycle method which  render on browser after the below render function completed  or we can say at last 
-  async componentDidMount(props) {
-    // this function will print this at last or after the render function 
+  async componentDidMount() {
+    
+    this.update();
+    
+  }
+
+  update = async()=>{
     this.props.setProgress(10);
     let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.API_KEY}&page=1&pageSize=10`;
     this.setState({ loading: true })
@@ -47,49 +50,30 @@ export class News extends Component {
       page:1,
     })
     this.props.setProgress(100);
-    
   }
 
   handlePrevClick = async () => {
-    console.log("prev");
+   
+    this.setState({
+      page: this.state.page - 1,
+     
+      loading: false
+    })
+  this.update();
 
-    if (this.state.page - 1 > Math.ceil(this.state.totalResults / 10)) {
-
-    } else {
-
-      let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.API_KEY}&page=${this.state.page - 1}&pageSize=10`;
-      this.setState({ loading: true })
-      // this is immutable thats why it cannot be changed directly
-      let data = await fetch(url);
-      let result = await data.json();
-      console.log(result);
-
-      this.setState({
-        page: this.state.page - 1,
-        articles: result.articles,
-        loading: false
-      })
-    }
+     
+    
   }
 
   handleNextClick = async () => {
-    console.log("next");
-    if (this.state.page + 1 > Math.ceil(this.state.totalResults) / 10) {
-
-    } else {
-
-      let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.API_KEY}2&page=${this.state.page + 1}&pageSize=10`;
-      this.setState({ loading: true })
-      let data = await fetch(url);
-      let result = await data.json();
-      console.log(result);
+    
 
       this.setState({
         page: this.state.page + 1,
-        articles: result.articles,
-        loading: false
+        
+     
       })
-    }
+    this.update();
   }
 
   fetchMoreData = async () => {
