@@ -22,7 +22,7 @@ export default class App extends Component {
       this.setState({progress:progress})
      }
 
-     API_KEY = process.env.REACT_APP_API;
+     API_KEY = '63da427e4207427cbbddbc2d0238ab7a';
 
 
   render() {
